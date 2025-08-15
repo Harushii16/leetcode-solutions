@@ -1,0 +1,36 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        // Handle overflow case: INT_MIN / -1 = 2^31, which exceeds int range
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        // Determine the sign of the result
+        boolean isPositive = (dividend < 0) == (divisor < 0);
+
+        // Convert to long to handle overflow and take absolute values
+        long n = Math.abs((long) dividend);
+        long d = Math.abs((long) divisor);
+
+        int result = 0;
+
+        // Subtract powers of divisor from dividend
+        while (n >= d) {
+            long temp = d;
+            int multiple = 1;
+
+            // Find the highest multiple of divisor that fits in dividend
+            while (n >= (temp << 1)) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+
+            // Subtract and add multiple to result
+            n -= temp;
+            result += multiple;
+        }
+
+        // Apply sign
+        return isPositive ? result : -result;
+    }
+}
