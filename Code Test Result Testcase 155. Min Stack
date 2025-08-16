@@ -1,0 +1,47 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+class MinStack {
+    private Deque<Long> st;
+    private long mini;
+
+    public MinStack() {
+        st = new ArrayDeque<>();
+        mini = Long.MAX_VALUE;
+    }
+
+    public void push(int val) {
+        long v = val;
+        if (st.isEmpty()) {
+            st.push(v);
+            mini = v;
+        } else if (v >= mini) {
+            st.push(v);
+        } else {
+            // store encoded value without overflow
+            st.push(2L * v - mini);
+            mini = v;
+        }
+    }
+
+    public void pop() {
+        if (st.isEmpty()) return;
+        long top = st.pop();
+        if (top < mini) {
+            // restore previous minimum
+            mini = 2 * mini - top;
+        }
+        if (st.isEmpty()) mini = Long.MAX_VALUE; // optional hygiene
+    }
+
+    public int top() {
+        if (st.isEmpty()) return -1; // or throw
+        long top = st.peek();
+        return (top >= mini) ? (int) top : (int) mini;
+    }
+
+    public int getMin() {
+        if (st.isEmpty()) return -1; // or throw
+        return (int) mini;
+    }
+}
