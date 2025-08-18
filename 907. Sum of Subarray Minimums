@@ -1,0 +1,50 @@
+class Solution {
+    public int[] findnse(int[] arr) {
+        // Your code goes here
+        int n=arr.length;
+        int result[]=new int[n];
+        Stack<Integer> st=new Stack<>();
+        for(int i=n-1;i>=0;i--){
+            int num=arr[i];
+            
+            while(!st.isEmpty() && arr[st.peek()]>num){
+                st.pop();
+            }
+            result[i]=st.isEmpty()?n:st.peek();
+            st.push(i);
+        }
+        return result;
+    }
+
+    public int[] findpse(int[] arr) {
+        // Your code goes here
+        int n=arr.length;
+        int result[]=new int[n];
+        Stack<Integer> st=new Stack<>();
+        for(int i=0;i<n;i++){
+            int num=arr[i];
+            
+            while(!st.isEmpty() && arr[st.peek()]>=num){
+                st.pop();
+            }
+            result[i]=st.isEmpty()?-1:st.peek();
+            st.push(i);
+        }
+        return result;
+    }
+
+
+    public int sumSubarrayMins(int[] arr) {
+        int n=arr.length;
+        int nse[]=findnse(arr);
+        int pse[]=findpse(arr);
+        int mod=(int)1e9+7;
+        long total=0;
+        for(int i=0;i<n;i++){
+            long left=i-pse[i];
+            long right=nse[i]-i;
+            total=(total+(right*left*arr[i])%mod)%mod;
+        }
+        return (int)total;
+    }
+}
