@@ -30,8 +30,7 @@ Input: heightMap = [
 ]
 Output: 10
 
-yaml
-Copy code
+
 
 ---
 
